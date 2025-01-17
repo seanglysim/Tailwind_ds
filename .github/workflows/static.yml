@@ -69,7 +69,7 @@ jobs:
                 </div>
               </body>
             </html>
-          content_type: "text/html"  # Ensure email content is interpreted as HTML
+            content_type: "text/html"  # Ensure email content is interpreted as HTML
           to: simseangly175@gmail.com
           from: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
           secure: true  # Use SSL/TLS
