@@ -47,7 +47,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-        - name: Send email notification on success
+      - name: Send email notification on success
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
