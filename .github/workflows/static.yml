@@ -42,34 +42,30 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
       - name: Send email notification on success
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465  # SSL/TLS port
-          username: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
-          password: ${{ secrets.GMAIL_PASSWORD }}  # GitHub Secret
-          subject: "🎉 Deployment Successful - GitHub Pages 🎉"
-          body: |
-            <html>
-              <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; color: #333;">
-                <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
-                  <h2 style="color: #4CAF50; text-align: center;">🎉 Deployment Successful!</h2>
-                  <p>Hello Sim Seangly,</p>
-                  <p>We're pleased to inform you that your deployment to GitHub Pages was successful! 😁</p>
-                  <p><strong>Repository:</strong> ${{ github.repository }}</p>
-                  <p><strong>URL:</strong> <a href="${{ steps.deployment.outputs.page_url }}" style="color: #4CAF50; text-decoration: none;">Visit the page here</a></p>
-                  <p style="font-style: italic;">Thank you for using GitHub Actions for your deployments! 🎯</p>
-                  <p>Best Regards,<br/> GitHub Actions Team</p>
-                </div>
-              </body>
-            </html>
-          to: simseangly175@gmail.com
-          from: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
-          secure: true  # Use SSL/TLS
+            server_address: smtp.gmail.com
+            server_port: 465  # SSL/TLS port
+            username: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
+            password: ${{ secrets.GMAIL_PASSWORD }}  # GitHub Secret
+            subject: "🎉 Deployment Successful - GitHub Pages 🎉"
+            body: |
+              <html>
+                <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; color: #333;">
+                  <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #4CAF50; text-align: center;">🎉 Deployment Successful!</h2>
+                    <p>Hello Sim Seangly,</p>
+                    <p>We're pleased to inform you that your deployment to GitHub Pages was successful! 😁</p>
+                    <p><strong>Repository:</strong> seanglysim/Tailwind_ds</p>
+                    <p><strong>URL:</strong> <a href="https://seanglysim.github.io/Tailwind_ds/" style="color: #4CAF50; text-decoration: none;">Visit the page here</a></p>
+                    <p style="font-style: italic;">Thank you for using GitHub Actions for your deployments! 🎯</p>
+                    <p>Best Regards,<br/> GitHub Actions Team</p>
+                  </div>
+                </body>
+              </html>
+              content_type: "text/html"  # Ensure email content is interpreted as HTML
+            to: simseangly175@gmail.com
+            from: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
+            secure: true  # Use SSL/TLS
