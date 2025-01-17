@@ -2,15 +2,20 @@
 name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -22,43 +27,49 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Move files to root
+        run: |
+          # Move the contents of the src folder to the root
+          mv src/* .
 
-      - name: Build Tailwind CSS
-        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Upload Artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Deploy the entire 'src' folder since index.html is inside it
-          path: './src'
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Send Email Notification on Success
+        - name: Send email notification on success
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_PASSWORD }}
-          subject: "Deployment Successful - GitHub Pages"
+          server_port: 465  # SSL/TLS port
+          username: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
+          password: ${{ secrets.GMAIL_PASSWORD }}  # GitHub Secret
+          subject: "🎉 Deployment Successful - GitHub Pages 🎉"
           body: |
-            Hello Sim Seangly,
-            
-            Your deployment to GitHub Pages was successful! 🎉
-            - Repository: ${{ github.repository }}
-            - URL: ${{ steps.deployment.outputs.page_url }}
-
-            Regards,
-            GitHub Actions
+            <html>
+              <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; color: #333;">
+                <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+                  <h2 style="color: #4CAF50; text-align: center;">🎉 Deployment Successful!</h2>
+                  <p>Hello Sim Seangly,</p>
+                  <p>We're pleased to inform you that your deployment to GitHub Pages was successful! 😁</p>
+                  <p><strong>Repository:</strong> ${{ github.repository }}</p>
+                  <p><strong>URL:</strong> <a href="${{ steps.deployment.outputs.page_url }}" style="color: #4CAF50; text-decoration: none;">Visit the page here</a></p>
+                  <p style="font-style: italic;">Thank you for using GitHub Actions for your deployments! 🎯</p>
+                  <p>Best Regards,<br/> GitHub Actions Team</p>
+                </div>
+              </body>
+            </html>
           to: simseangly175@gmail.com
-          from: ${{ secrets.GMAIL_USERNAME }}
-          secure: true
+          from: ${{ secrets.GMAIL_USERNAME }}  # GitHub Secret
+          secure: true  # Use SSL/TLS
